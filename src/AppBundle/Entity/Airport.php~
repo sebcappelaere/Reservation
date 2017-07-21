@@ -28,6 +28,18 @@ class Airport
      */
     private $name;
 
+    /**
+     * @var City
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\City", inversedBy="airports")
+     */
+    private $city;
+
+    /**
+     * @var
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Flight", inversedBy="airports")
+     * @ORM\JoinTable(name="AirportFlight")
+     */
+    private $flights;
 
     /**
      * Get id
@@ -62,5 +74,28 @@ class Airport
     {
         return $this->name;
     }
-}
 
+    /**
+     * Set city
+     *
+     * @param \AppBundle\Entity\City $city
+     *
+     * @return Airport
+     */
+    public function setCity(\AppBundle\Entity\City $city = null)
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    /**
+     * Get city
+     *
+     * @return \AppBundle\Entity\City
+     */
+    public function getCity()
+    {
+        return $this->city;
+    }
+}

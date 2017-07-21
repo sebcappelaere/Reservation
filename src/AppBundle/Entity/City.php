@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -34,6 +35,12 @@ class City
      * @ORM\Column(name="zipCode", type="integer")
      */
     private $zipCode;
+
+    /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Airport", mappedBy="city")
+     */
+    private $airports;
 
 
     /**
@@ -92,5 +99,46 @@ class City
     public function getZipCode()
     {
         return $this->zipCode;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->airports = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add airport
+     *
+     * @param \AppBundle\Entity\Airport $airport
+     *
+     * @return City
+     */
+    public function addAirport(\AppBundle\Entity\Airport $airport)
+    {
+        $this->airports[] = $airport;
+
+        return $this;
+    }
+
+    /**
+     * Remove airport
+     *
+     * @param \AppBundle\Entity\Airport $airport
+     */
+    public function removeAirport(\AppBundle\Entity\Airport $airport)
+    {
+        $this->airports->removeElement($airport);
+    }
+
+    /**
+     * Get airports
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAirports()
+    {
+        return $this->airports;
     }
 }

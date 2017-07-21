@@ -28,6 +28,12 @@ class Company
      */
     private $name;
 
+    /**
+     * @var
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Flight", mappedBy="company")
+     */
+    private $flights;
+
 
     /**
      * Get id
@@ -63,4 +69,3 @@ class Company
         return $this->name;
     }
 }
-

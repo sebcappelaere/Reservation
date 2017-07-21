@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -41,6 +42,12 @@ class Passenger
      * @ORM\Column(name="passportNumber", type="integer", unique=true)
      */
     private $passportNumber;
+
+    /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Reservation", mappedBy="passenger")
+     */
+    private $reservations;
 
 
     /**
@@ -125,4 +132,3 @@ class Passenger
         return $this->passportNumber;
     }
 }
-

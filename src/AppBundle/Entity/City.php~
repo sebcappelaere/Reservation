@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -34,6 +35,12 @@ class City
      * @ORM\Column(name="zipCode", type="integer")
      */
     private $zipCode;
+
+    /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Airport", mappedBy="city")
+     */
+    private $airports;
 
 
     /**
@@ -94,4 +101,3 @@ class City
         return $this->zipCode;
     }
 }
-

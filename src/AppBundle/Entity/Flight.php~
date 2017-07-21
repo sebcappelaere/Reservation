@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -48,6 +49,24 @@ class Flight
      * @ORM\Column(name="arrivalTime", type="time")
      */
     private $arrivalTime;
+
+    /**
+     * @var ArrayCollection
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Airport", mappedBy="flights")
+     */
+    private $airports;
+
+    /**
+     * @var Company
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Company", inversedBy="flights")
+     */
+    private $company;
+
+    /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Reservation", mappedBy="flight")
+     */
+    private $reservations;
 
 
     /**
@@ -155,5 +174,69 @@ class Flight
     {
         return $this->arrivalTime;
     }
-}
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->airports = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
+    /**
+     * Add airport
+     *
+     * @param \AppBundle\Entity\Airport $airport
+     *
+     * @return Flight
+     */
+    public function addAirport(\AppBundle\Entity\Airport $airport)
+    {
+        $this->airports[] = $airport;
+
+        return $this;
+    }
+
+    /**
+     * Remove airport
+     *
+     * @param \AppBundle\Entity\Airport $airport
+     */
+    public function removeAirport(\AppBundle\Entity\Airport $airport)
+    {
+        $this->airports->removeElement($airport);
+    }
+
+    /**
+     * Get airports
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAirports()
+    {
+        return $this->airports;
+    }
+
+    /**
+     * Set company
+     *
+     * @param \AppBundle\Entity\Company $company
+     *
+     * @return Flight
+     */
+    public function setCompany(\AppBundle\Entity\Company $company = null)
+    {
+        $this->company = $company;
+
+        return $this;
+    }
+
+    /**
+     * Get company
+     *
+     * @return \AppBundle\Entity\Company
+     */
+    public function getCompany()
+    {
+        return $this->company;
+    }
+}

@@ -28,6 +28,24 @@ class Reservation
      */
     private $dateTime;
 
+    /**
+     * @var User
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="reservations")
+     */
+    private $user;
+
+    /**
+     * @var Passenger
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Passenger", inversedBy="reservations")
+     */
+    private $passenger;
+
+    /**
+     * @var Flight
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Flight", inversedBy="reservations")
+     */
+    private $flight;
+
 
     /**
      * Get id
@@ -61,5 +79,77 @@ class Reservation
     public function getDateTime()
     {
         return $this->dateTime;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \AppBundle\Entity\User $user
+     *
+     * @return Reservation
+     */
+    public function setUser(\AppBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \AppBundle\Entity\User
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * Set passenger
+     *
+     * @param \AppBundle\Entity\Passenger $passenger
+     *
+     * @return Reservation
+     */
+    public function setPassenger(\AppBundle\Entity\Passenger $passenger = null)
+    {
+        $this->passenger = $passenger;
+
+        return $this;
+    }
+
+    /**
+     * Get passenger
+     *
+     * @return \AppBundle\Entity\Passenger
+     */
+    public function getPassenger()
+    {
+        return $this->passenger;
+    }
+
+    /**
+     * Set flight
+     *
+     * @param \AppBundle\Entity\Flight $flight
+     *
+     * @return Reservation
+     */
+    public function setFlight(\AppBundle\Entity\Flight $flight = null)
+    {
+        $this->flight = $flight;
+
+        return $this;
+    }
+
+    /**
+     * Get flight
+     *
+     * @return \AppBundle\Entity\Flight
+     */
+    public function getFlight()
+    {
+        return $this->flight;
     }
 }
