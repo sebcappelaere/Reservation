@@ -1,0 +1,20 @@
+{
+  "name": "reservation",
+  "authors": [
+    "Sébastien CAPPELAERE <sebcappelaere@sfr.fr>"
+  ],
+  "description": "Application de réservation de vols",
+  "main": "",
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.7"
+  }
+}
