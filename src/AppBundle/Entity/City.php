@@ -24,15 +24,20 @@ class City
 
     /**
      * @var string
-     *
+     * @Assert\Length(
+     *     min = 2,
+     *     max = 100,
+     *     minMessage = "Le nom de ville doit avoir au minimum {{ limit }} caractères",
+     *     maxMessage = "Le nom de ville doit avoir au maximum {{ limit }} caractères"
+     * )
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="zipCode", type="integer")
+     * @var string
+     * @Assert\Regex(pattern="/\d{5}/", message="Ce code postal n'est pas valide"
+     * @ORM\Column(name="zipCode", type="string", length=5)
      */
     private $zipCode;
 

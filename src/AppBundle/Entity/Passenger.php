@@ -24,14 +24,24 @@ class Passenger
 
     /**
      * @var string
-     *
+     * @Assert\Length(
+     *     min = 2,
+     *     max = 100,
+     *     minMessage = "Le nom du passager doit avoir au minimum {{ limit }} caractères",
+     *     maxMessage = "Le nom du passager doit avoir au maximum {{ limit }} caractères"
+     * )
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
 
     /**
      * @var string
-     *
+     * @Assert\Length(
+     *     min = 2,
+     *     max = 100,
+     *     minMessage = "Le prénom du passager doit avoir au minimum {{ limit }} caractères",
+     *     maxMessage = "Le prénom du passager doit avoir au maximum {{ limit }} caractères"
+     * )
      * @ORM\Column(name="firstName", type="string", length=255)
      */
     private $firstName;

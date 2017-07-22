@@ -24,28 +24,28 @@ class Flight
 
     /**
      * @var \DateTime
-     *
+     * @Assert\Date(message = "Cette date n'est pas valide")
      * @ORM\Column(name="departureDate", type="date")
      */
     private $departureDate;
 
     /**
      * @var \DateTime
-     *
+     * @Assert\Time (message = "Cette heure n'est pas valide")
      * @ORM\Column(name="departureTime", type="time")
      */
     private $departureTime;
 
     /**
      * @var \DateTime
-     *
+     * @Assert\Date(message = "Cette date n'est pas valide")
      * @ORM\Column(name="arrivalDate", type="date")
      */
     private $arrivalDate;
 
     /**
      * @var \DateTime
-     *
+     * @Assert\Time (message = "Cette heure n'est pas valide")
      * @ORM\Column(name="arrivalTime", type="time")
      */
     private $arrivalTime;

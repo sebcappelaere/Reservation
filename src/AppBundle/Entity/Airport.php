@@ -24,7 +24,12 @@ class Airport
 
     /**
      * @var string
-     *
+     * @Assert\Length(
+     *     min = 2,
+     *     max = 100,
+     *     minMessage = "Le nom de l'aéroport doit avoir au minimum {{ limit }} caractères",
+     *     maxMessage = "Le nom de l'aéroport doit avoir au maximum {{ limit }} caractères"
+     * )
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;

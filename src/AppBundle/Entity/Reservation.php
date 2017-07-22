@@ -3,12 +3,14 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * Reservation
  *
  * @ORM\Table(name="reservation")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\ReservationRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Reservation
 {
@@ -60,15 +62,14 @@ class Reservation
     /**
      * Set dateTime
      *
-     * @param \DateTime $dateTime
+     * @ORM\PrePersist()
      *
-     * @return Reservation
+     * Persistance de la date de réservation à la création
      */
-    public function setDateTime($dateTime)
+    public function setDateTime()
     {
-        $this->dateTime = $dateTime;
+        $this->dateTime = new \DateTime();
 
-        return $this;
     }
 
     /**
