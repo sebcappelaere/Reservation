@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Company;
+use AppBundle\Form\CompanyType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,7 +22,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/admin/addCompany", name="addCompany"
+     * @Route("/admin/addCompany", name="addCompany")
      */
     public function newCompany(Request $request){
         //Instance de l'entité Company
@@ -29,7 +30,7 @@ class DefaultController extends Controller
 
         //Création du formulaire
         $form = $this->createForm(
-            Company::class,
+            CompanyType::class,
             $company,
             ["method" => "post"]
         );
