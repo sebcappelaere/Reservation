@@ -3,6 +3,32 @@
 {% block title %}Nouvelle Compagnie{% endblock %}
 
 {% block body %}
-    <h1>Création d'une nouvelle compagnie</h1>
+    <h2>Création d'une nouvelle compagnie</h2>
     {{ form(companyForm) }}
+
+    {% if app.session.flashBag.has("info") %}
+        <div class="alert alert-info">
+            {% for message in app.session.flashBag.get("info") %}
+                <li style="list-style-type: none">{{ message }}</li>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if app.session.flashBag.has("error") %}
+        <div class="alert alert-danger">
+            {% for message in app.session.flashBag.get("error") %}
+                <li style="list-style-type: none">{{ message }}</li>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <hr>
+    <h2 style="text-align: center">Liste des compagnies</h2>
+    <table class="table table-striped table-bordered">
+        {% for company in listCompany %}
+            <tr>
+                <td>{{ company.name }}</td>
+            </tr>
+        {% endfor %}
+    </table>
 {% endblock %}

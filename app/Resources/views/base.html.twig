@@ -9,7 +9,7 @@
         {% endblock %}
 
     </head>
-    <body>
+    <div class="container-fluid">
         {% block nav %}
             <nav class="navbar navbar-default">
                 <div class="container-fluid">
@@ -65,10 +65,12 @@
                 </div><!-- /.container-fluid -->
             </nav>
         {% endblock %}
-        {% block body %}{% endblock %}
+        <div class="col-md-10 col-md-offset-1">
+            {% block body %}{% endblock %}
+        </div>
         {% block javascripts %}
             <script src="{{ asset('dependencies/jquery/dist/jquery.min.js') }}"></script>
             <script src="{{ asset('dependencies/bootstrap/dist/js/bootstrap.min.js') }}"></script>
         {% endblock %}
-    </body>
+    </div>
 </html>
