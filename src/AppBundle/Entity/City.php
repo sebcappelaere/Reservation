@@ -37,7 +37,7 @@ class City
 
     /**
      * @var string
-     * @Assert\Regex(pattern="/\d{5}/", message="Ce code postal n'est pas valide"
+     * @Assert\Regex(pattern="/\d{5}/", message="Ce code postal n'est pas valide")
      * @ORM\Column(name="zipCode", type="string", length=5)
      */
     private $zipCode;

@@ -1,34 +1,52 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Nouvelle Compagnie{% endblock %}
+{% block title %}Nouvelle Compagnie/Ville{% endblock %}
 
 {% block body %}
-    <h2>Création d'une nouvelle compagnie</h2>
-    {{ form(companyForm) }}
+    <div class="col-md-4">
+        <h2>Ajout d'une nouvelle compagnie</h2>
+        {{ form(companyForm) }}
+        <hr>
+        <h2>Ajout d'une nouvelle ville</h2>
+        {{ form(cityForm) }}
 
-    {% if app.session.flashBag.has("info") %}
-        <div class="alert alert-info">
-            {% for message in app.session.flashBag.get("info") %}
-                <li style="list-style-type: none">{{ message }}</li>
+        {% if app.session.flashBag.has("info") %}
+            <div class="alert alert-info">
+                {% for message in app.session.flashBag.get("info") %}
+                    <li style="list-style-type: none">{{ message }}</li>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% if app.session.flashBag.has("error") %}
+            <div class="alert alert-danger">
+                {% for message in app.session.flashBag.get("error") %}
+                    <li style="list-style-type: none">{{ message }}</li>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="col-md-6 col-md-offset-1">
+        <h2 style="text-align: center">Liste des compagnies</h2>
+        <table class="table table-striped table-bordered">
+            {% for company in listCompany %}
+                <tr>
+                    <td>{{ company.name }}</td>
+                </tr>
             {% endfor %}
-        </div>
-    {% endif %}
+        </table>
 
-    {% if app.session.flashBag.has("error") %}
-        <div class="alert alert-danger">
-            {% for message in app.session.flashBag.get("error") %}
-                <li style="list-style-type: none">{{ message }}</li>
+        <hr>
+        <h2 style="text-align: center">Liste des villes</h2>
+        <table class="table table-striped table-bordered">
+            {% for city in listCity %}
+                <tr>
+                    <td>{{ city.name }} ({{ city.zipCode }})</td>
+                </tr>
             {% endfor %}
-        </div>
-    {% endif %}
+        </table>
+    </div>
 
-    <hr>
-    <h2 style="text-align: center">Liste des compagnies</h2>
-    <table class="table table-striped table-bordered">
-        {% for company in listCompany %}
-            <tr>
-                <td>{{ company.name }}</td>
-            </tr>
-        {% endfor %}
-    </table>
+
 {% endblock %}

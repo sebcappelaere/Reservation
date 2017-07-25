@@ -6,12 +6,17 @@
         {% block stylesheets %}
             <link rel="stylesheet" href="{{ asset('dependencies/bootstrap/dist/css/bootstrap.min.css') }}">
             <link rel="stylesheet" href="{{ asset('dependencies/bootstrap/dist/css/bootstrap-theme.min.css') }}">
+            <style>
+                #page{
+                    padding-top: 50px;
+                }
+            </style>
         {% endblock %}
 
     </head>
     <div class="container-fluid">
         {% block nav %}
-            <nav class="navbar navbar-default">
+            <nav class="navbar navbar-default navbar-fixed-top">
                 <div class="container-fluid">
                     <!-- Brand and toggle get grouped for better mobile display -->
                     <div class="navbar-header">
@@ -65,7 +70,7 @@
                 </div><!-- /.container-fluid -->
             </nav>
         {% endblock %}
-        <div class="col-md-10 col-md-offset-1">
+        <div id="page" class="col-md-10 col-md-offset-1">
             {% block body %}{% endblock %}
         </div>
         {% block javascripts %}

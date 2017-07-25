@@ -2,7 +2,9 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\City;
 use AppBundle\Entity\Company;
+use AppBundle\Form\CityType;
 use AppBundle\Form\CompanyType;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -60,12 +62,65 @@ class DefaultController extends Controller
         $listCompany = $repo->createQueryBuilder('c')
             ->orderBy('c.name')->getQuery()->getResult();
 
+        //Instance de l'entité City
+        $city = new City();
+
+        //Création du formulaire
+        $formCity = $this->createForm(
+            CityType::class,
+            $city,
+            ["method" => "post"]
+        );
+
+        //Injection des données postées dans le formulaire
+        $formCity->handleRequest($request);
+
+        //Persistence uniquement si le formulaire est soumis et si les tests de validation sont tous passés
+        if ($formCity->isSubmitted() && $formCity->isValid()){
+            try{
+                $name = $formCity['name']->getData();
+                $zipCode = $formCity['zipCode']->getData();
+
+                //Recherche du couple (name,zipCode) dans la base de données
+                $em = $this->getDoctrine()->getRepository('AppBundle:City');
+                $qb = $em->createQueryBuilder('c')
+                    ->select('c')
+                    ->where('c.name = :name')
+                    ->andWhere('c.zipCode = :zipCode');
+                $query = $qb->getQuery()
+                    ->setParameter('name',$name)
+                    ->setParameter('zipCode',$zipCode);
+                $result = $query->getArrayResult();
+
+                if(empty($result)){
+                    //Persistence de l'entité City
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($city);
+                    $em->flush();
+
+                    //Ajout d'un message flash de création
+                    $this->addFlash("info", "La ville a bien été créée");
+                } else {
+                    $this->addFlash("error","Cette ville existe déjà");
+                }
+
+            } catch (UniqueConstraintViolationException $ex){
+                $this->addFlash("error","Cette ville existe déjà");
+            }
+        }
+
+        $repo = $this->getDoctrine()->getRepository('AppBundle:City');
+        $listCity = $repo->createQueryBuilder('c')
+            ->orderBy('c.name')->getQuery()->getResult();
+
         //Affichage de la vue avec le formulaire
         return $this->render(
             "newCompany.html.twig",
             [
                 "companyForm" => $form->createView(),
-                "listCompany" => $listCompany
+                "cityForm" => $formCity->createView(),
+                "listCompany" => $listCompany,
+                "listCity" => $listCity
             ]
         );
 
