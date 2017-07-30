@@ -2,8 +2,10 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Airport;
 use AppBundle\Entity\City;
 use AppBundle\Entity\Company;
+use AppBundle\Form\AirportType;
 use AppBundle\Form\CityType;
 use AppBundle\Form\CompanyType;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
@@ -25,9 +27,9 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/admin/addCompany", name="addCompany")
+     * @Route("/admin", name="adminHome")
      */
-    public function newCompany(Request $request){
+    public function newEntities(Request $request){
         //Instance de l'entité Company
         $company = new Company();
 
@@ -61,6 +63,7 @@ class DefaultController extends Controller
         $repo = $this->getDoctrine()->getRepository('AppBundle:Company');
         $listCompany = $repo->createQueryBuilder('c')
             ->orderBy('c.name')->getQuery()->getResult();
+
 
         //Instance de l'entité City
         $city = new City();
@@ -113,14 +116,50 @@ class DefaultController extends Controller
         $listCity = $repo->createQueryBuilder('c')
             ->orderBy('c.name')->getQuery()->getResult();
 
+
+        //Instance de l'entité Airport
+        $airport = new Airport();
+
+        //Création du formulaire
+        $formAirport = $this->createForm(
+            AirportType::class,
+            $airport,
+            ["method" => "post"]
+        );
+
+        //Injection des données postées dans le formulaire
+        $formAirport->handleRequest($request);
+
+        //Persistence uniquement si le formulaire est soumis et si les tests de validation sont tous passés
+        if ($formAirport->isSubmitted() && $formAirport->isValid()){
+            try{
+                //Persistence de l'entité City
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($airport);
+                $em->flush();
+
+                //Ajout d'un message flash de création
+                $this->addFlash("info", "L'aéroport a bien été créé");
+            } catch (UniqueConstraintViolationException $ex){
+            $this->addFlash("error","Cet aéroport existe déjà");
+            }
+        }
+
+        $repo = $this->getDoctrine()->getRepository('AppBundle:Airport');
+        $listAirport = $repo->createQueryBuilder('a')
+            ->orderBy('a.name')->getQuery()->getResult();
+
+
         //Affichage de la vue avec le formulaire
         return $this->render(
-            "newCompany.html.twig",
+            "newEntities.html.twig",
             [
                 "companyForm" => $form->createView(),
                 "cityForm" => $formCity->createView(),
+                "airportForm" => $formAirport->createView(),
                 "listCompany" => $listCompany,
-                "listCity" => $listCity
+                "listCity" => $listCity,
+                "listAirport" => $listAirport
             ]
         );
 

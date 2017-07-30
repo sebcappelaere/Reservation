@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Nouvelle Compagnie/Ville{% endblock %}
+{% block title %}Nouvel(le) Compagnie/Ville/Aéroport{% endblock %}
 
 {% block body %}
     <div class="col-md-4">
@@ -9,6 +9,9 @@
         <hr>
         <h2>Ajout d'une nouvelle ville</h2>
         {{ form(cityForm) }}
+        <hr>
+        <h2>Ajout d'un nouvel aéroport</h2>
+        {{ form(airportForm) }}
 
         {% if app.session.flashBag.has("info") %}
             <div class="alert alert-info">
@@ -30,6 +33,9 @@
     <div class="col-md-6 col-md-offset-1">
         <h2 style="text-align: center">Liste des compagnies</h2>
         <table class="table table-striped table-bordered">
+            <tr>
+                <th>Nom de la compagnie</th>
+            </tr>
             {% for company in listCompany %}
                 <tr>
                     <td>{{ company.name }}</td>
@@ -40,9 +46,31 @@
         <hr>
         <h2 style="text-align: center">Liste des villes</h2>
         <table class="table table-striped table-bordered">
+            <tr>
+                <th>Nom de la ville</th>
+                <th>Code postal</th>
+            </tr>
             {% for city in listCity %}
                 <tr>
-                    <td>{{ city.name }} ({{ city.zipCode }})</td>
+                    <td>{{ city.name }}</td>
+                    <td>{{ city.zipCode }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+
+        <hr>
+        <h2 style="text-align: center">Liste des aéroports</h2>
+        <table class="table table-striped table-bordered">
+            <tr>
+                <th>Nom de l'aéroport</th>
+                <th>Ville</th>
+                <th>Code postal</th>
+            </tr>
+            {% for airport in listAirport %}
+                <tr>
+                    <td>{{ airport.name }}</td>
+                    <td>{{ airport.city.name }}</td>
+                    <td>{{ airport.city.zipCode }}</td>
                 </tr>
             {% endfor %}
         </table>
