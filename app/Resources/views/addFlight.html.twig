@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouveau vol{% endblock %}
+
+{% block body %}
+<div class="col-md-8">
+    <h2>Ajout d'un nouveau vol</h2>
+    {{ form(flightForm) }}
+
+    {% if app.session.flashBag.has("info") %}
+        <div class="alert alert-info">
+            {% for message in app.session.flashBag.get("info") %}
+                <li style="list-style-type: none">{{ message }}</li>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if app.session.flashBag.has("error") %}
+        <div class="alert alert-danger">
+            {% for message in app.session.flashBag.get("error") %}
+                <li style="list-style-type: none">{{ message }}</li>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+
+<div class="col-md-12">
+    <h2 style="text-align: center">Liste des vols</h2>
+    <table class="table table-striped table-bordered">
+        <tr>
+            <th>Numéro du vol</th>
+            <th>Date de départ</th>
+            <th>Heure de départ</th>
+            <th>Aéroport de départ</th>
+            <th>Ville</th>
+            <th>Code postal</th>
+            <th>Date d'arrivée</th>
+            <th>Heure d'arrivée</th>
+            <th>Aéroport d'arrivée</th>
+            <th>Ville</th>
+            <th>Code postal</th>
+        </tr>
+        {% for flight in listFlight %}
+            <tr>
+                <td>{{ flight.id }}</td>
+                <td>{{ flight.departureDate|date('d/m/Y') }}</td>
+                <td>{{ flight.departureTime|date('H:i') }}</td>
+                <td>{{ flight.departureAirport.name }}</td>
+                <td>{{ flight.departureAirport.city.name }}</td>
+                <td>{{ flight.departureAirport.city.zipCode }}</td>
+                <td>{{ flight.arrivalDate|date('d/m/Y') }}</td>
+                <td>{{ flight.arrivalTime|date('H:i') }}</td>
+                <td>{{ flight.arrivalAirport.name }}</td>
+                <td>{{ flight.arrivalAirport.city.name }}</td>
+                <td>{{ flight.arrivalAirport.city.zipCode }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}
+
+
+

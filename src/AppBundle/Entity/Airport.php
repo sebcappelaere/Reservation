@@ -43,11 +43,17 @@ class Airport
 
     /**
      * @var ArrayCollection
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Flight", inversedBy="airports")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Flight", mappedBy="departureAirport")
      * @ORM\JoinTable(name="AirportFlight")
      */
-    private $flights;
+    private $departureFlights;
 
+    /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Flight", mappedBy="arrivalAirport")
+     * @ORM\JoinTable(name="AirportFlight")
+     */
+    private $arrivalFlights;
 
     /**
      * Get id

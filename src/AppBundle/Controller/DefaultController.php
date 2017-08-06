@@ -5,9 +5,11 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Airport;
 use AppBundle\Entity\City;
 use AppBundle\Entity\Company;
+use AppBundle\Entity\Flight;
 use AppBundle\Form\AirportType;
 use AppBundle\Form\CityType;
 use AppBundle\Form\CompanyType;
+use AppBundle\Form\FlightType;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -163,5 +165,108 @@ class DefaultController extends Controller
             ]
         );
 
+    }
+
+    /**
+     * @Route("/addFlight", name="addFlight")
+     */
+    public function addFlight(Request $request){
+        //Instance de l'entité Flight
+        $flight = new Flight();
+
+        //Création du formulaire
+        $form = $this->createForm(
+            FlightType::class,
+            $flight,
+            ["method" => "post"]
+        );
+
+        //Injection des données postées dans le formulaire
+        $form->handleRequest($request);
+
+        //Persistence uniquement si le formulaire est soumis et si les tests de validation sont tous passés
+        if ($form->isSubmitted() && $form->isValid()){
+            $errors = false;
+            //Contrôle de l'arrivée postérieure au départ
+            $departureDate = $form['departureDate']->getData();
+            $departureTime = $form['departureTime']->getData();
+            $arrivalDate = $form['arrivalDate']->getData();
+            $arrivalTime = $form['arrivalTime']->getData();
+            if ($departureDate>$arrivalDate or ($departureDate==$arrivalDate and $departureTime>=$arrivalTime)){
+                $this->addFlash("error", "Le départ doit être antérieur à l'arrivée");
+                $errors = true;
+            }
+
+            //Contrôle des aéroports de départ et d'arrivée différents
+            if ($form['departureAirport']->getData()==$form['arrivalAirport']->getData()){
+                $this->addFlash("error", "Les aéroports de départ et d'arrivée doivent être différents");
+                $errors = true;
+            }
+
+            //Contrôle de l'unicité du vol en base de données
+            $departureAirport = $form['departureAirport']->getData();
+            $arrivalAirport = $form['arrivalAirport']->getData();
+            $company = $form['company']->getData();
+            $repo = $this->getDoctrine()->getRepository('AppBundle:Flight');
+            $qb = $repo->createQueryBuilder('f')
+               ->select('f')
+                ->where("f.departureDate= :depDate 
+                        AND f.departureTime= :depTime
+                        AND f.arrivalDate= :arrDate
+                        AND f.arrivalTime= :arrTime
+                        AND f.departureAirport= :depAirport
+                        AND f.arrivalAirport= :arrAirport
+                        AND f.company= :company")
+                ->setParameters(
+                    [
+                        'depDate' => date_format($departureDate,'Y-m-d'),
+                        'depTime' => date_format($departureTime,'H:i:s'),
+                        'arrDate' => date_format($arrivalDate,'Y-m-d'),
+                        'arrTime' => date_format($arrivalTime,'H:i:s'),
+                        'depAirport' => $departureAirport,
+                        'arrAirport' => $arrivalAirport,
+                        'company' => $company
+                    ]
+                );
+            $flightBDD = $qb->getQuery()->getArrayResult();
+
+            if ($flightBDD != []){
+                $this->addFlash("error","Ce vol existe déjà");
+                $errors = true;
+            }
+
+            //Persistence s'il n'y a pas d'erreurs
+            if (!$errors){
+                try{
+                    //Persistence de l'entité Flight
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($flight);
+                    $em->flush();
+
+                    //Ajout d'un message flash de création
+                    $this->addFlash("info", "Le vol a bien été créé");
+
+                } catch (UniqueConstraintViolationException $ex){
+                    $this->addFlash("error","Ce vol existe déjà");
+                }
+            }
+        }
+
+        $repo = $this->getDoctrine()->getRepository('AppBundle:Flight');
+        $listFlight = $repo->createQueryBuilder('f')
+            ->orderBy('f.departureDate')
+            ->addOrderBy('f.departureTime')
+            ->addOrderBy('f.arrivalDate')
+            ->addOrderBy('f.arrivalTime')
+            ->getQuery()->getResult();
+
+        //Affichage de la vue avec le formulaire
+        return $this->render(
+            "addFlight.html.twig",
+            [
+                "flightForm" => $form->createView(),
+                "listFlight" => $listFlight
+            ]
+        );
     }
 }

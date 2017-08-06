@@ -52,10 +52,16 @@ class Flight
     private $arrivalTime;
 
     /**
-     * @var ArrayCollection
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Airport", mappedBy="flights")
+     * @var Airport
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Airport", inversedBy="departureFlights")
      */
-    private $airports;
+    private $departureAirport;
+
+    /**
+     * @var Airport
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Airport", inversedBy="arrivalFlights")
+     */
+    private $arrivalAirport;
 
     /**
      * @var Company
@@ -184,37 +190,51 @@ class Flight
     }
 
     /**
-     * Add airport
+     * Set departureAirport
      *
-     * @param \AppBundle\Entity\Airport $airport
+     * @param \AppBundle\Entity\Airport $departureAirport
      *
      * @return Flight
      */
-    public function addAirport(\AppBundle\Entity\Airport $airport)
+    public function setDepartureAirport(\AppBundle\Entity\Airport $airport = null)
     {
-        $this->airports[] = $airport;
+        $this->departureAirport = $airport;
 
         return $this;
     }
 
     /**
-     * Remove airport
+     * Get departureAirport
      *
-     * @param \AppBundle\Entity\Airport $airport
+     * @return \AppBundle\Entity\Airport
      */
-    public function removeAirport(\AppBundle\Entity\Airport $airport)
+    public function getDepartureAirport()
     {
-        $this->airports->removeElement($airport);
+        return $this->departureAirport;
     }
 
     /**
-     * Get airports
+     * Set arrivalAirport
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @param \AppBundle\Entity\Airport $arrivalAirport
+     *
+     * @return Flight
      */
-    public function getAirports()
+    public function setArrivalAirport(\AppBundle\Entity\Airport $airport = null)
     {
-        return $this->airports;
+        $this->arrivalAirport = $airport;
+
+        return $this;
+    }
+
+    /**
+     * Get arrivalAirport
+     *
+     * @return \AppBundle\Entity\Airport
+     */
+    public function getArrivalAirport()
+    {
+        return $this->arrivalAirport;
     }
 
     /**
